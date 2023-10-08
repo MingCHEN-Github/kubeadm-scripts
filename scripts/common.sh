@@ -4,9 +4,9 @@
 
 set -euxo pipefail
 
-# Variable Declaration
+# Variable Declaration       
 
-KUBERNETES_VERSION="1.28.1-00"
+KUBERNETES_VERSION="1.27.4"  # change the previous V1.28 to v1.27.4
 
 # disable swap
 sudo swapoff -a
