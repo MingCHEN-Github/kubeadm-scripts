@@ -5,9 +5,9 @@
 set -euxo pipefail
 
 # Kubernetes Variable Declaration
-KUBERNETES_VERSION="v1.28"
-CRIO_VERSION="v1.28"
-KUBERNETES_INSTALL_VERSION="1.28.4-1.1"
+KUBERNETES_VERSION="v1.32"
+CRIO_VERSION="v1.32"
+KUBERNETES_INSTALL_VERSION="1.32.4-1.1"
 
 # Disable swap
 sudo swapoff -a
@@ -42,15 +42,10 @@ sudo apt-get install -y apt-transport-https ca-certificates curl gpg
 sudo apt-get update -y
 sudo apt-get install -y software-properties-common curl apt-transport-https ca-certificates
 
-# curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/Release.key |
-#     gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
-
-# echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/ /" |
-#     tee /etc/apt/sources.list.d/cri-o.list
-curl -fsSL https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_VERSION/deb/Release.key |
+curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/Release.key |
     gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
 
-echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://download.opensuse.org/repositories/isv:/cri-o:/stable:/$CRIO_VERSION/deb/ /" |
+echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/ /" |
     tee /etc/apt/sources.list.d/cri-o.list
 
 sudo apt-get update -y
