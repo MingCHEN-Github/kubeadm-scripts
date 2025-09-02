@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #
 # Setup for Control Plane (Master) servers
@@ -7,7 +6,7 @@ set -euxo pipefail
 
 # If you need public access to API server using the servers Public IP adress, change PUBLIC_IP_ACCESS to true.
 
-PUBLIC_IP_ACCESS="false"
+PUBLIC_IP_ACCESS="false" # if the server (master node) using public IP, then set to true. if the server uses a private IP, then it is set to false.
 NODENAME=$(hostname -s)
 POD_CIDR="192.168.0.0/16"
 
@@ -19,7 +18,7 @@ sudo kubeadm config images pull
 
 if [[ "$PUBLIC_IP_ACCESS" == "false" ]]; then
     
-    MASTER_PRIVATE_IP=$(ip addr show eth1 | awk '/inet / {print $2}' | cut -d/ -f1)
+    MASTER_PRIVATE_IP=$(ip addr show eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
     sudo kubeadm init --apiserver-advertise-address="$MASTER_PRIVATE_IP" --apiserver-cert-extra-sans="$MASTER_PRIVATE_IP" --pod-network-cidr="$POD_CIDR" --node-name "$NODENAME" --ignore-preflight-errors Swap
 
 elif [[ "$PUBLIC_IP_ACCESS" == "true" ]]; then
@@ -40,4 +39,8 @@ sudo chown "$(id -u)":"$(id -g)" "$HOME"/.kube/config
 
 # Install Claico Network Plugin Network 
 
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
+
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/custom-resources.yaml -O
+
+kubectl create -f custom-resources.yaml
